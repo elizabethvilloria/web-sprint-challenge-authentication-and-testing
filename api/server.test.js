@@ -18,7 +18,9 @@ describe('Auth Router Tests', () => {
         .post('/api/auth/register')
         .send({ username: 'newUser', password: 'newPass123' });
       expect(res.status).toBe(201);
-      expect(res.body).toHaveProperty('message', 'User registered successfully');
+      expect(res.body).toHaveProperty('id');
+      expect(res.body).toHaveProperty('username', 'newUser');
+      expect(res.body).toHaveProperty('password'); 
     });
 
     it('should return 400 if username or password is missing', async () => {
