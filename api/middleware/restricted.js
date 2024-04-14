@@ -1,14 +1,20 @@
-module.exports = (req, res, next) => {
-  next();
-  /*
-    IMPLEMENT
+const jwt = require('jsonwebtoken');
+const { JWT_SECRET } = require('../secrets/secrets'); 
 
-    1- On valid token in the Authorization header, call next.
+function restricted(req, res, next) {
+  const token = req.headers.authorization;
 
-    2- On missing token in the Authorization header,
-      the response body should include a string exactly as follows: "token required".
+  if (!token) {
+    return res.status(401).json({ message: "Token required" });
+  }
 
-    3- On invalid or expired token in the Authorization header,
-      the response body should include a string exactly as follows: "token invalid".
-  */
-};
+  jwt.verify(token, JWT_SECRET, (err, decodedToken) => {
+    if (err) {
+      return res.status(401).json({ message: "Token invalid" });
+    }
+    req.user = decodedToken;  
+    next();
+  });
+}
+
+module.exports = restricted;
