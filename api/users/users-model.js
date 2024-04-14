@@ -6,7 +6,7 @@ function find() {
 
 async function findBy(filter) {
     const user = await db('users').where(filter).first();
-    return user || null; // Return null if no user found
+    return user || null; 
 }
 
 async function add(user) {
